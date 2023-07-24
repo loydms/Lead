@@ -102,8 +102,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);
 
   // Sandwich spacer
-  auto qM = Material::Type::Quartz;
-  G4Material* quartz = MaterialsManager::get().get(qM);
+  auto sM = Material::Type::PWO;
+  G4Material* spacermat = MaterialsManager::get().get(sM);
 
   //if (scintGap){
   G4Box* spacer =
@@ -112,7 +112,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4LogicalVolume* logicSpacer =
     new G4LogicalVolume(spacer,
-                        quartz,
+                        spacermat,
                         "spacer");
 
   G4VPhysicalVolume* spacerPhys = new G4PVPlacement(0,
@@ -149,7 +149,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     false,
                     0,
                     checkOverlaps);
-  // Grease between sandwich and spacer - if greaeeWidth = 0 then none
 
   auto boroM = Material::Type::Diff;
   G4Material* boro = MaterialsManager::get().get(boroM);

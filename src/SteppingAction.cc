@@ -43,19 +43,21 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   auto stepProcess = (G4VProcess*)postStep->GetProcessDefinedStep();
   auto procName = stepProcess->GetProcessName();
   auto name = postPv->GetName();
+  /*
   std::cout << "particle " << particle << std::endl;
   std::cout << "process  " << procName << std::endl;
   std::cout << "start e  " << preStep->GetTotalEnergy() << std::endl;
   std::cout << "after e  " << postStep->GetTotalEnergy() << std::endl;
   std::cout << "start body " << preStep->GetPhysicalVolume()->GetName() <<std::endl;
   std::cout << "end body " << postPv->GetName() << std::endl;
+  */
   //std::cout << "start z " << preStep->GetPosition().z() << std::endl;
   //std::cout << "stop  z " << postStep->GetPosition().z() << std::endl;
 
   if (name == prePv->GetName()){
     body = 0;
     if (name == "Scint1"){body = 1;}
-    else if (name == "spacer"){body = 2;}
+    else if (name == "Spacer"){body = 2;}
     else if (name == "Scint2"){body = 3;}
     run->addEnergy(body, edep);
     //if(postPv->GetName() == "Wrap"){track->SetTrackStatus(fStopAndKill);}

@@ -36,9 +36,9 @@ double DetectorConstruction::GetWidth(){return pixelWidth;}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  G4double diffWidth = 0.38;
   G4double scintWidth = 0.05;
-  G4double scintGap = 0.01;
+  G4double scintGap = 0.05;
+  G4double diffWidth = 0.38;
   //G4double squareSide = 15.7;
   G4double squareSide = nArrays*nPixels*(pixelWidth + gapWidth);
   G4bool checkOverlaps = true;
@@ -87,17 +87,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     new G4LogicalVolume(scint1,
                         gs20,
                         "Scint1");
-  // Between scintillator sandwich and spacer
-  G4double airGap1 = 0.0001;
-  // Between spacer and SiPM face
-  G4double airGap2 = 0.0001;
   //Vis Settings
   G4Colour blue(0, 0, 1);
   G4VisAttributes* scintColor = new G4VisAttributes(blue);
   logicScint1->SetVisAttributes(scintColor);
   // Back scintillator
   G4VPhysicalVolume* scintPhys1 = new G4PVPlacement(0,
-                    G4ThreeVector(0,0,-(scintGap+scintWidth)*cm),
+                    G4ThreeVector(0,0,-(scintGap + scintWidth)*cm),
                     logicScint1,
                     "Scint1",
                     logicWorld,
@@ -106,8 +102,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);
 
   // Sandwich spacer
-  auto boroM = Material::Type::Diff;
-  G4Material* boro = MaterialsManager::get().get(boroM);
+  auto qM = Material::Type::Quartz;
+  G4Material* quartz = MaterialsManager::get().get(qM);
 
   //if (scintGap){
   G4Box* spacer =
@@ -116,7 +112,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4LogicalVolume* logicSpacer =
     new G4LogicalVolume(spacer,
-                        boro,
+                        quartz,
                         "spacer");
 
   G4VPhysicalVolume* spacerPhys = new G4PVPlacement(0,
@@ -127,7 +123,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     false,
                     0,
                     checkOverlaps);
-  //}
 
   // GS20 Scintillator 2
 
@@ -155,42 +150,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     0,
                     checkOverlaps);
   // Grease between sandwich and spacer - if greaeeWidth = 0 then none
-  auto silM = Material::Type::Silicone;
-  G4Material* Silicone = MaterialsManager::get().get(silM);
-  G4double greaseWidth = 0.0;
-  if (greaseWidth)
-  {
-  G4Box* grease =
-    new G4Box("Silicone G",
-              0.5 * squareSide*cm, 0.5 * squareSide*cm, 0.5 * greaseWidth * cm);
 
-
-    G4LogicalVolume* logicGrease =
-    new G4LogicalVolume(grease,
-                        Silicone,
-                        "Grease");
-
-  //Vis Settings
-  G4Colour purple(1, 0, 1);
-  G4VisAttributes* cookieColor = new G4VisAttributes(purple);
-  logicGrease->SetVisAttributes(cookieColor);
-
-  G4VPhysicalVolume* greasePhys = new G4PVPlacement(0,
-                    G4ThreeVector(0,0,
-                      (0.5*(scintWidth + greaseWidth))*cm),
-                    logicGrease,
-                    "Grease",
-                    logicWorld,
-                    false,
-                    0,
-                    checkOverlaps);
-  }
+  auto boroM = Material::Type::Diff;
+  G4Material* boro = MaterialsManager::get().get(boroM);
   // Diffuser
-
 
   G4Box* glass =
     new G4Box("Glass",
               0.5 * squareSide*cm, 0.5 * squareSide*cm, 0.5 * diffWidth*cm);
+
 
   G4LogicalVolume* logicGlass =
     new G4LogicalVolume(glass,
@@ -198,7 +166,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                         "Glass");
 
   G4VPhysicalVolume* diffPhys = new G4PVPlacement(0,
-                    G4ThreeVector(0,0,(greaseWidth + airGap1 + 0.5 * (diffWidth+scintWidth))*cm),
+                    G4ThreeVector(0,0,(0.5 * (diffWidth+scintWidth))*cm),
                     logicGlass,
                     "Diffuser",
                     logicWorld,
@@ -208,39 +176,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   //Silicone Cookie
 
-  G4double cookieWidth = 0.0;
-  if (cookieWidth)
-  {
-  G4Box* cookie =
-    new G4Box("Silicone",
-              0.5 * squareSide*cm, 0.5 * squareSide*cm, 0.5 * cookieWidth * cm);
-
-
-    G4LogicalVolume* logicSilicone =
-    new G4LogicalVolume(cookie,
-                        Silicone,
-                        "Cookie");
-    //Vis Settings
-    G4Colour purple(1, 0, 1);
-    G4VisAttributes* cookieColor = new G4VisAttributes(purple);
-    logicSilicone->SetVisAttributes(cookieColor);
-
-    G4VPhysicalVolume* siliconePhys = new G4PVPlacement(0,
-                      G4ThreeVector(0,0,
-                        (0.5*(scintWidth + cookieWidth)+diffWidth+greaseWidth)*cm),
-                      logicSilicone,
-                      "Cookie",
-                      logicWorld,
-                      false,
-                      0,
-                      checkOverlaps);
-  };
   // Teflon edge
-
+  /*
   auto tefm = Material::Type::Teflon;
   G4Material* tef = MaterialsManager::get().get(tefm);
 
-  G4double wrapWidth = (0.5*(diffWidth+scintWidth*2+scintGap+cookieWidth+greaseWidth+airGap1 + airGap2)+0.2);
+  G4double wrapWidth = (0.5*(diffWidth+scintWidth*2+scintGap)+0.2);
   G4Box* outer = new G4Box("out",
                           (0.5*squareSide + 0.1)*cm, (0.5*squareSide + 0.1)*cm,
                           wrapWidth * cm);
@@ -254,7 +195,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4VPhysicalVolume* wrapPhys = new G4PVPlacement(0,
                       G4ThreeVector(0,0,
-                       -(wrapWidth - 0.5*scintWidth - greaseWidth - cookieWidth - airGap1 - airGap2 - diffWidth - 0.05)*cm),
+                       -(wrapWidth - 0.5*scintWidth - diffWidth - 0.05)*cm),
                       logicWrap,
                       "Wrap",
                       logicWorld,
@@ -293,7 +234,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4VisAttributes* capVis = new G4VisAttributes(capColour);
   logicCap->SetVisAttributes(capVis);
   logicCap->SetVisAttributes(false);
-
+  */
   /*
    * Single Detector
   //SiPM Detector - just a single surface for now
@@ -329,7 +270,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Pixel array
   //Parameters
   G4double detectorWidth = 0.1;
-  G4double positionZ = 0.5 * (scintWidth + detectorWidth)+greaseWidth+diffWidth+cookieWidth+airGap1+airGap2;
+  G4double positionZ = 0.5 * (scintWidth + detectorWidth)+diffWidth;
   //G4int NbOfPixelsX = nPixels * nArrays;
   //G4int NbOfPixelsY = nPixels * nArrays;
   //G4double gapWidth = 0.1;
@@ -376,6 +317,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 */
   //Surfaces
   //Between scintillator and world - reflective teflon like
+  /*
   G4OpticalSurface* ScintWrap1 = new G4OpticalSurface("Wrap1");
   new G4LogicalBorderSurface("Wrap1", scintPhys1, capPhys, ScintWrap1);
   G4OpticalSurface* ScintWrap2 = new G4OpticalSurface("Wrap2");
@@ -408,6 +350,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   ScintWrap2->SetMaterialPropertiesTable(SMPT2);
   ScintWrap3->SetMaterialPropertiesTable(SMPT2);
   GapWrap->SetMaterialPropertiesTable(SMPT2);
+  */
 /*
   G4OpticalSurface* ScintCap = new G4OpticalSurface("Cap");
   new G4LogicalBorderSurface("Cap", capPhys, scintPhys1, ScintCap);

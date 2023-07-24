@@ -29,9 +29,13 @@ Writer::~Writer()
   outFile.close();
 }
 
-void Writer::write(int particle, int id, G4double totalPhotons)
+void Writer::write(int particle, G4double e1, G4double e2, G4double e3)
 {
-  outFile << particle << ' ' << id << ' ' << totalPhotons << std::endl;
+  outFile << "Particle: " << particle << "\t";
+  outFile << "Energy 1: " << e1 << "\t";
+  outFile << "Energy 2: " << e2 << "\t";
+  outFile << "Energy 3: " << e3 << "\t";
+  outFile << std::endl;
 }
 
 void Writer::saveLightCone()

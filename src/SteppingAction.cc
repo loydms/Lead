@@ -9,7 +9,6 @@
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4TouchableHandle.hh"
 #include "G4Scintillation.hh"
 
 SteppingAction::SteppingAction()
@@ -30,9 +29,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   auto preStep = step->GetPreStepPoint();
   auto postPv = postStep->GetPhysicalVolume();
   auto prePv = preStep->GetPhysicalVolume();
-  auto touch = postStep->GetTouchableHandle();
-  G4int copyNo = touch->GetReplicaNumber();
 
+  auto edep = step->GetTotalEnergyDeposit();
   if (!postPv){return;}
 
   auto particle = track->GetParticleDefinition()->GetParticleName();
@@ -44,7 +42,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   auto posLi = postStep->GetPosition();
   auto stepProcess = (G4VProcess*)postStep->GetProcessDefinedStep();
   auto procName = stepProcess->GetProcessName();
-/*
+  auto name = postPv->GetName();
   std::cout << "particle " << particle << std::endl;
   std::cout << "process  " << procName << std::endl;
   std::cout << "start e  " << preStep->GetTotalEnergy() << std::endl;
@@ -54,48 +52,18 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   //std::cout << "start z " << preStep->GetPosition().z() << std::endl;
   //std::cout << "stop  z " << postStep->GetPosition().z() << std::endl;
 
-  if (postPv->GetName() == prePv->GetName()){
+  if (name == prePv->GetName()){
+    body = 0;
+    if (name == "Scint1"){body = 1;}
+    else if (name == "spacer"){body = 2;}
+    else if (name == "Scint2"){body = 3;}
+    run->addEnergy(body, edep);
     //if(postPv->GetName() == "Wrap"){track->SetTrackStatus(fStopAndKill);}
   }
-*/
-  if ((particle == "alpha") && (status == 2))
-  {
-  //run->setValues(posLi.x() / cm, posLi.y() / cm);
-  run->setBody(postPv->GetName());
-  if ((postPv->GetName() == "Scint1") || (postPv->GetName() == "Scint2"))
-  {body = postPv->GetName();}
-  }
 
-  if ((particle == "gamma" && (procName == "compt")))
-  {
-    run->setBody(postPv->GetName());
-    //if ((postPv->GetName() == "Scint1") || (postPv->GetName() == "Scint2"))
-    //{body = postPv->GetName();}
-  }
 
-  //Add hits to run:: array[totalpixels]
-  // dont care about ligth cone for this
-  if (postPv->GetName() == "Det" && particle == "opticalphoton")
-    {
-      run->increment();
-      //if (body == "Scint1")
-      //{writer->increment();}
-      //if (body == "Scint2")
-      //{writer->incrementB();}
-      track->SetTrackStatus(fStopAndKill);
-    }
 
-  if (run->rawData)
-  {
-    if (postPv->GetName() == "Det" && particle == "opticalphoton")
-    {
-    auto pos = postStep->GetPosition();
-    run->addDataRaw(pos.x() / cm, pos.y() / cm, copyNo);
-    return;
-    }
 
-      return;
-  }
 
   return;
 }

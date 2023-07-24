@@ -13,7 +13,7 @@ class SteppingAction : public G4UserSteppingAction
   public:
     SteppingAction();
     ~SteppingAction() override;
-    G4String body;
+    int body;
 
     void UserSteppingAction(const G4Step*) override;
   bool rawData;

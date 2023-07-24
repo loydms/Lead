@@ -16,6 +16,9 @@ Run::Run() {
   part = 0;
   row = DetectorConstruction::GetPixels() * DetectorConstruction::GetArrays();
   width = DetectorConstruction::GetWidth();
+  e1 = 0;
+  e2 = 0;
+  e3 = 0;
   //array = std::vector<std::vector<int>>(row, std::vector<int>(row, 0));
   //array2 = std::vector<std::vector<int>>(row, std::vector<int>(row, 0));
   //lcFile.open("lightcone.txt");
@@ -43,7 +46,13 @@ Run::~Run()
 
 G4double Run::getTotalCounts(){return countTotal;}
 G4double Run::getCurrentCount(){return countCurrent;}
-void Run::clearCurrent(){countCurrent = 0;}
+void Run::clearCurrent()
+{
+  countCurrent = 0;
+  e1 = 0;
+  e2 = 0;
+  e3 = 0;
+}
 void Run::setParticle(int id){part = id;}
 /*
 void Run::clearArray()
@@ -83,11 +92,11 @@ void Run::saveNeutrons()
 }
 
 
-void Run::increment()
+void Run::addEnergy(int id, G4double energy)
 {
-  //array[i][j] ++;
-  countTotal ++;
-  countCurrent ++;
+  if (id == 1){e1 += energy;}
+  if (id == 2){e2 += energy;}
+  if (id == 3){e3 += energy;}
 }
 /*
 void Run::increment2(int i, int j)
@@ -140,9 +149,10 @@ void Run::saveData()
 {
   auto writer = DetectorConstruction::GetWriter();
   // 0 is first, 1 is second (on diffuser)
-  int id = (body == "Scint1") ? 0 : 1;
-  writer->write(part, id, countCurrent);
+  writer->write(part, e1, e2, e3);
 }
+
+G4double Run::eSum(){return e1 + e2 + e3;}
 void Run::addDataRaw(const double& x, const double& y, const int copy)
 {
   rawFile << x << " " << y << " " << copy << std::endl;

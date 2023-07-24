@@ -26,10 +26,5 @@ void EventAction::EndOfEventAction(const G4Event*)
   n ++;
   auto run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   auto writer = DetectorConstruction::GetWriter();
-  if (run->getCurrentCount() >= 50){
-  writer->addScint();
-  run->saveData();
-}
-int s = writer->getScint();
-if ((!(s%50)) && (s<4000)){std::cout << s << " Neutrons" << std::endl;}
+  if (run->eSum()){run->saveData();}
 }

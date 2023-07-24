@@ -22,9 +22,11 @@ using std::chrono::high_resolution_clock;
 PrimaryGeneratorAction::PrimaryGeneratorAction():
   generator(high_resolution_clock::now().time_since_epoch().count())
 {
-  loop = true;
+  loop1 = true;
+  loop2 = false;
   going = true;
   G4int n_particle = 1;
+  G4int num = 0;
   totalWidth = DetectorConstruction::GetWidth() * DetectorConstruction::GetPixels() * DetectorConstruction::GetArrays();
   fParticleGun = new G4ParticleGun(n_particle);
 
@@ -43,12 +45,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  std::cout << num << std::endl;
   if (going)
   {
   auto run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   auto writer = DetectorConstruction::GetWriter();
-  if ((writer->getScint() >= 2000) && loop)
+  if ((num >= 10) && loop1)
   {
+    std::cout << "10 events over" << std::endl;
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName;
     G4ParticleDefinition* gamma = particleTable->FindParticle(particleName="gamma");
@@ -58,19 +62,40 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     std::cout << "Average From Neutrons " << run->calculateAverage() << std::endl;
     run->setParticle(1);
     //run->clearArray();
-    loop = false;
+    loop1 = false;
+    loop2 = true;
   }
-  if (!loop){
+  if ((num >= 20) && loop2)
+  {
+    std::cout << "20 events over" << std::endl;
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4String particleName;
+    G4ParticleDefinition* gamma = particleTable->FindParticle(particleName="gamma");
+    fParticleGun->SetParticleDefinition(gamma);
+    //fParticleGun->SetParticleEnergy(1*MeV);
+    //G4cout << "Hit 1000 counts runs" << G4endl;
+    std::cout << "Average From Neutrons " << run->calculateAverage() << std::endl;
+    run->setParticle(2);
+    //run->clearArray();
+    loop2 = false;
+  }
+  if (!loop1){
       //uniform_real_distribution<double> dist(0.1, 2);
       //fParticleGun->SetParticleEnergy(dist(generator));
       fParticleGun->SetParticleEnergy(0.5*MeV);
     }
-  if (writer->getScint() >= 4000)
+  if (loop2){
+      //uniform_real_distribution<double> dist(0.1, 2);
+      //fParticleGun->SetParticleEnergy(dist(generator));
+      fParticleGun->SetParticleEnergy(1*MeV);
+      }
+  if (num >= 30)
   {
     std::cout << "Average From Gammas " << run->calculateAverage() << std::endl;
     going = false;
     return;
   }
+  num ++;
   uniform_real_distribution<double> dist(-3, 3);
   uniform_real_distribution<double> dist2(-5.7,5.7);
   uniform_real_distribution<double> dist3(-0.011,0.011);
@@ -82,7 +107,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //fParticleGun->SetParticleMomentumDirection(G4ThreeVector(sin(thetaX*PI/180)*cm,sin(thetaY*PI/180)*cm,10*cm));
   x = 0;
   y = 0;
-  fParticleGun->SetParticlePosition(G4ThreeVector(x * cm, y * cm,-9.5*cm));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0 * cm, 0 * cm,-9.5*cm));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   //fParticleGun->SetParticlePosition(G4ThreeVector(-(2.5*(0.63 + 0.085)+x)*cm,y*cm,-9.5*cm));
   fParticleGun->GeneratePrimaryVertex(anEvent);

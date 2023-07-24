@@ -22,8 +22,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event*) override;
 
     const G4ParticleGun* GetPArticleGun() const {return fParticleGun;}
-
-    bool loop;
+    int num;
+    bool loop1;
+    bool loop2;
     bool going;
     double totalWidth;
 

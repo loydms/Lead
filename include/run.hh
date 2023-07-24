@@ -11,7 +11,8 @@ class Run: public G4Run
   public:
     Run();
     ~Run();
-    void increment();
+    void addEnergy(int,G4double);
+    G4double eSum();
     void setValues(double x, double y);
     void doMath();
     void endRun();
@@ -41,6 +42,9 @@ class Run: public G4Run
     G4double countCurrent;
     G4String body;
     int part;
+    G4double e1;
+    G4double e2;
+    G4double e3;
     std::vector<std::vector<int>> array;
     std::vector<std::vector<int>> array2;
     std::vector<double> sumX;

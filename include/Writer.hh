@@ -25,7 +25,7 @@ class Writer
     std::vector<double> sumX;
     std::vector<double> sumB;
     int row;
-    void write(int particle, int id, G4double totalPhotons);
+    void write(int particle, G4double, G4double, G4double);
     G4int n;
     G4int s;
   private:

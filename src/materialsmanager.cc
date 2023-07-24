@@ -351,9 +351,9 @@ void MaterialsManager::buildGS20(){
         100*cm, 100*cm, 100*cm, 100*cm, 100*cm, 100*cm,
         100*cm, 100*cm, 100*cm
       };
-    pt20->AddProperty("SCINTILLATIONCOMPONENT1", ScintEnergy, ScintFast, nPoints);
-    pt20->AddProperty("RINDEX", ScintEnergy, r_ind, nPoints);
-    pt20->AddProperty("ABSLENGTH", ScintEnergy, abs, nPoints);
+    //pt20->AddProperty("SCINTILLATIONCOMPONENT1", ScintEnergy, ScintFast, nPoints);
+    //pt20->AddProperty("RINDEX", ScintEnergy, r_ind, nPoints);
+    //pt20->AddProperty("ABSLENGTH", ScintEnergy, abs, nPoints);
 
     gs20->SetMaterialPropertiesTable(pt20);
     m_materials[Material::GS20] = gs20;

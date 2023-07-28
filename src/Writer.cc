@@ -31,10 +31,13 @@ Writer::~Writer()
 
 void Writer::write(int particle, G4double e1, G4double e2, G4double e3)
 {
-  outFile << "Particle: " << particle << "\t";
-  outFile << "Energy 1: " << e1 << "\t";
-  outFile << "Energy 2: " << e2 << "\t";
-  outFile << "Energy 3: " << e3 << "\t";
+  /*
+  outFile << "Particle: " << particle << " ";
+  outFile << "Energy 1: " << e1 << " ";
+  outFile << "Energy 2: " << e2 << " ";
+  outFile << "Energy 3: " << e3 << " ";
+  */
+  outFile << particle << " " << e1 << " " << e2 << " " << e3 << " ";
   outFile << std::endl;
 }
 

@@ -41,16 +41,18 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   auto status = track->GetTrackStatus();
   auto posLi = postStep->GetPosition();
   auto stepProcess = (G4VProcess*)postStep->GetProcessDefinedStep();
+  auto preproc = track->GetCreatorProcess();
   auto procName = stepProcess->GetProcessName();
   auto name = postPv->GetName();
-  /*
+  if (preproc){
+  std::cout << "Creating Process " << preproc->GetProcessName() << std::endl;}
   std::cout << "particle " << particle << std::endl;
   std::cout << "process  " << procName << std::endl;
-  std::cout << "start e  " << preStep->GetTotalEnergy() << std::endl;
-  std::cout << "after e  " << postStep->GetTotalEnergy() << std::endl;
+  std::cout << "kinetic  " << track->GetDynamicParticle()->GetKineticEnergy() << std::endl;
+  std::cout << "edep  " << edep << std::endl;
   std::cout << "start body " << preStep->GetPhysicalVolume()->GetName() <<std::endl;
   std::cout << "end body " << postPv->GetName() << std::endl;
-  */
+
   //std::cout << "start z " << preStep->GetPosition().z() << std::endl;
   //std::cout << "stop  z " << postStep->GetPosition().z() << std::endl;
 

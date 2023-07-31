@@ -18,6 +18,7 @@ Writer::Writer()
     outFile.open("results.txt");
     if (!outFile.good()) {
       std::cerr << "Run::Run(): unable to open results.txt" << std::endl;}
+    outFile << "Particle Energy1 Energy2 Energy3" << std::endl;
 }
 
 Writer::~Writer()

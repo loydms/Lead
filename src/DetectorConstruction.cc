@@ -37,7 +37,7 @@ double DetectorConstruction::GetWidth(){return pixelWidth;}
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   G4double scintWidth = 0.05;
-  G4double scintGap = 0.05;
+  G4double scintGap = 0.0;
   G4double diffWidth = 0.38;
   //G4double squareSide = 15.7;
   G4double squareSide = nArrays*nPixels*(pixelWidth + gapWidth);
@@ -47,7 +47,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //Half of size of cube- 20 x 20 x 20 cm world
   G4double worldSizeXYZ = 10 * cm;
 
-  auto airM = Material::Type::Air;
+  auto airM = Material::Type::Galactic;
   G4Material* air = MaterialsManager::get().get(airM);
 
   G4Box* solidWorld =
@@ -102,10 +102,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);
 
   // Sandwich spacer
-  auto sM = Material::Type::PWO;
+  auto sM = Material::Type::Lead_glass;
   G4Material* spacermat = MaterialsManager::get().get(sM);
 
-  //if (scintGap){
+  if (scintGap){
   G4Box* spacer =
     new G4Box("spacer",
               0.5 * squareSide*cm, 0.5 * squareSide*cm, 0.5 * scintGap*cm);
@@ -123,7 +123,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     false,
                     0,
                     checkOverlaps);
-
+}
   // GS20 Scintillator 2
 
 
@@ -140,7 +140,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   //Vis Settings
   logicScint2->SetVisAttributes(scintColor);
-
+/*
   G4VPhysicalVolume* scintPhys2 = new G4PVPlacement(0,
                     G4ThreeVector(0,0,0),
                     logicScint2,
@@ -172,7 +172,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     false,
                     0,
                     checkOverlaps);
-
+*/
   //Silicone Cookie
 
   // Teflon edge
@@ -277,7 +277,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //G4double firstPositionY = -squareSide / 2 + (pixelWidth + gapWidth) / 2;
   //Mother volume for pixels.  Only pixels can be in this volume
   // Air and invisible. Should not affect photons
-
+/*
   G4Box* pixelMother = new G4Box("pMother", (squareSide / 2)*cm,
                                             (squareSide / 2)*cm,
                                             (detectorWidth / 2)   *cm);
@@ -296,6 +296,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
               false,
               0,
               checkOverlaps);
+              */
 /*
   //G4Box* pixelS = new G4Box("pixel", 1*cm, 1*cm, 1*cm);
   //auto logicChamber = new G4LogicalVolume(pixelS, Si, "pixelLogic");

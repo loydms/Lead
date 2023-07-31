@@ -241,6 +241,7 @@ void MaterialsManager::buildGS20(){
     auto pt20 = new G4MaterialPropertiesTable;
     double energies[2] = {0.01 * eV, 100. * MeV};
     G4double lightyield = 6000;
+    lightyield = 0;
     G4double li_e = 4.78;
     G4double alpha[2] = {0.01 * lightyield/li_e * eV, lightyield/li_e * 100 * MeV};
     //G4double triton[2] = {1255.23 / MeV, 1255.23 / MeV};

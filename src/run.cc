@@ -97,10 +97,10 @@ void Run::addEnergy(int id, G4double energy)
   if (id == 1){e1 += energy;}
   if (id == 2){e2 += energy;}
   if (id == 3){e3 += energy;}
-  std::cout << "e1 : " << e1 <<std::endl;
-  std::cout << "e3 : " << e3 <<std::endl;
-  if ((e1 > 5) || (e2 > 5) || (e3 > 5))
-  {std::cout << "Value too high" << std::endl;}
+  //std::cout << "e1 : " << e1 <<std::endl;
+  //std::cout << "e3 : " << e3 <<std::endl;
+  //if ((e1 > 5) || (e2 > 5) || (e3 > 5))
+  //{std::cout << "Value too high" << std::endl;}
 }
 /*
 void Run::increment2(int i, int j)

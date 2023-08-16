@@ -24,8 +24,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/ixl/Desktop/Code/Geant4/Lead/src/run.cc" "CMakeFiles/lead.dir/src/run.cc.o" "gcc" "CMakeFiles/lead.dir/src/run.cc.o.d"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

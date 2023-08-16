@@ -10,6 +10,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Scintillation.hh"
+#include "G4HadronInelasticProcess.hh"
 
 SteppingAction::SteppingAction()
 {
@@ -41,17 +42,24 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   auto status = track->GetTrackStatus();
   auto posLi = postStep->GetPosition();
   auto stepProcess = (G4VProcess*)postStep->GetProcessDefinedStep();
+  G4HadronInelasticProcess* had = dynamic_cast<G4HadronInelasticProcess*>(stepProcess);
+  const G4Isotope* isotope = (had ? had->GetTargetIsotope() : 0);
   auto preproc = track->GetCreatorProcess();
   auto procName = stepProcess->GetProcessName();
   auto name = postPv->GetName();
+  /*
   if (preproc){
   std::cout << "Creating Process " << preproc->GetProcessName() << std::endl;}
   std::cout << "particle " << particle << std::endl;
   std::cout << "process  " << procName << std::endl;
+  if (isotope){
+  std::cout << "target isotope " << isotope << std::endl;}
   std::cout << "kinetic  " << track->GetDynamicParticle()->GetKineticEnergy() << std::endl;
   std::cout << "edep  " << edep << std::endl;
   std::cout << "start body " << preStep->GetPhysicalVolume()->GetName() <<std::endl;
   std::cout << "end body " << postPv->GetName() << std::endl;
+  std::cout << std::endl;
+  */
 
   //std::cout << "start z " << preStep->GetPosition().z() << std::endl;
   //std::cout << "stop  z " << postStep->GetPosition().z() << std::endl;

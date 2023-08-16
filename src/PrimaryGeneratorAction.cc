@@ -45,12 +45,12 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  std::cout << "Creating Neutron" << std::endl;
+  //std::cout << "Creating Neutron" << std::endl;
   if (going)
   {
   auto run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   auto writer = DetectorConstruction::GetWriter();
-  if ((num >= 100000) && loop1)
+  if ((num >= 200000) && loop1)
   {
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName;
@@ -64,7 +64,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     loop1 = false;
     loop2 = true;
   }
-  if ((num >= 200000) && loop2)
+  if ((num >= 400000) && loop2)
   {
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName;
@@ -78,16 +78,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     loop2 = false;
   }
   if (!loop1){
+    //This runs second!
       //uniform_real_distribution<double> dist(0.1, 2);
       //fParticleGun->SetParticleEnergy(dist(generator));
       fParticleGun->SetParticleEnergy(0.25*MeV);
     }
   if (loop2){
+    //This runs first!
       //uniform_real_distribution<double> dist(0.1, 2);
       //fParticleGun->SetParticleEnergy(dist(generator));
-      fParticleGun->SetParticleEnergy(0.5*MeV);
+      fParticleGun->SetParticleEnergy(1.25*MeV);
       }
-  if (num >= 300000)
+  if (num >= 600000)
   {
     std::cout << "Average From Gammas " << run->calculateAverage() << std::endl;
     going = false;

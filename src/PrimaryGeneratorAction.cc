@@ -81,13 +81,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //This runs second!
       //uniform_real_distribution<double> dist(0.1, 2);
       //fParticleGun->SetParticleEnergy(dist(generator));
-      fParticleGun->SetParticleEnergy(0.25*MeV);
+      fParticleGun->SetParticleEnergy(0.5*MeV);
     }
   if (loop2){
     //This runs first!
       //uniform_real_distribution<double> dist(0.1, 2);
       //fParticleGun->SetParticleEnergy(dist(generator));
-      fParticleGun->SetParticleEnergy(1.25*MeV);
+      fParticleGun->SetParticleEnergy(1.0*MeV);
       }
   if (num >= 600000)
   {

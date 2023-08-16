@@ -36,8 +36,8 @@ double DetectorConstruction::GetWidth(){return pixelWidth;}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  G4double scintWidth = 0.1;
-  G4double scintGap = 0.00;
+  G4double scintWidth = 0.05;
+  G4double scintGap = 0.1;
   G4double diffWidth = 0.38;
   //G4double squareSide = 15.7;
   G4double squareSide = nArrays*nPixels*(pixelWidth + gapWidth);
@@ -102,7 +102,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);
 
   // Sandwich spacer
-  auto sM = Material::Type::Quartz;
+  //auto sM = Material::Type::Quartz;
+  //auto sM = Material::Type::PWO;
+  auto sM = Material::Type::Lead_glass;
   G4Material* spacermat = MaterialsManager::get().get(sM);
 
   if (scintGap){
@@ -140,7 +142,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   //Vis Settings
   logicScint2->SetVisAttributes(scintColor);
-  /*
+  if (scintGap){
   G4VPhysicalVolume* scintPhys2 = new G4PVPlacement(0,
                     G4ThreeVector(0,0,0),
                     logicScint2,
@@ -149,7 +151,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     false,
                     0,
                     checkOverlaps);
-    */
+    }
 /*
   auto boroM = Material::Type::Diff;
   G4Material* boro = MaterialsManager::get().get(boroM);

@@ -119,14 +119,15 @@ def plot_all(d):
         
 
 #%%
-fn = 'results/PWO_500_1_200keach.txt'
-an = 'results/PWO_250_125_200keach.txt'
-fn2 = 'results/Q_500_1_200keach.txt'
-an2 = 'results/Q_250_125_200keach.txt'
+path = 'results/1 mm gap/'
+fn = path + 'PWO_500_1_200keach.txt'
+an = path + 'PWO_250_125_200keach.txt'
+fn2 = path + 'Q_500_1_200keach.txt'
+an2 = path + 'Q_250_125_200keach.txt'
 fn3 = 'results/None_500_1_200keach.txt'
 an3 = 'results/None_250_125_200keach.txt'
-fn4 = 'results/PbG_500_1_200keach.txt'
-an4 = 'results/PbG_250_125_200keach.txt'
+fn4 = path + 'PbG_500_1_200keach.txt'
+an4 = path + 'PbG_250_125_200keach.txt'
 
 PWO = Data(fn,'PWO')
 Q = Data(fn2,'Quartz')
